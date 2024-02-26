@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil
+{% endblock %}
+
+{% block body %}
+	<section>
+		<div class="d-flex flex-row justify-content-between align-items-center">
+			<h1 class="my-4">Tous nos articles</h1>
+			{% if is_granted("IS_AUTHENTICATED_FULLY") %}
+				<div>
+					<a href="{{path("app_front_article_add")}}" class="btn btn-success">Ajouter un article</a>
+				</div>
+			{% endif %}
+		</div>
+		<div class="d-flex flex-column gap-3">
+			{% for article in articles %}
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title py-2">{{ article.title }}</h5>
+						<p class="card-text">{{ article.content }}</p>
+						<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseComments{{article.id}}" aria-expanded="false" aria-controls="collapseComments{{article.id}}">
+							Voir les commentaires
+						</button>
+						<div class="collapse mt-3" id="collapseComments{{article.id}}">
+							<div class="card card-body p-4">
+								{% for comment in article.comments %}
+									<div class=" {% if not loop.last %}border-bottom pb-3{% endif %}">
+										<p class="m-0">{{comment.content}}</p>
+										<small>Publié le :{{comment.datePublished | date('d-m-y')}}
+										</small>
+									</div>
+								{% endfor %}
+								<div class="mt-4">
+									{% if is_granted("IS_AUTHENTICATED_FULLY") %}
+										<a href="{{path("app_front_comment_add", {id:article.id})}}">Ajouter un commentaire</a>
+									{% else %}
+										Vous devez être connecté pour ajouter un commentaire.
+										<a href="{{path("app_security_login")}}">Se connecter</a>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer text-center">
+						Date de publication :
+						{{ article.datePublished | date('d/m/Y')}}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</section>
+{% endblock %}

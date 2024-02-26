@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un article
+{% endblock %}
+
+{% block body %}
+	<section class="my-5">
+		<h2>Ajouter un article</h2>
+
+		{{form_start(form)}}
+		{{form_widget(form)}}
+		<button class="btn btn-primary" type="submit">Ajouter l'article</button>
+		{{form_end(form)}}
+	</section>
+{% endblock %}
